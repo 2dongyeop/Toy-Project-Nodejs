@@ -67,5 +67,35 @@
       "time": "09:00 ~ 18:00",
       "holiday": "Friday"
     }
+  ],
+  "members": [
+    {
+      "id": 1,
+      "name": "Mingi Kim"
+    },
+    {
+      "id": 2,
+      "name": "Jinwook Lee"
+    },
+    {
+      "id": 3,
+      "name": "Seungjun Baek"
+    },
+    {
+      "id": 4,
+      "name": "Dongyeop Lee"
+    }
+  ],
+  "payment":[
+    {
+      "cash":"OK"
+    },
+    {
+      "credit_card":"OK"
+    },
+    {
+      "local_gift_card":"NO"
+    }
   ]
+
 }
