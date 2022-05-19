@@ -60,7 +60,7 @@
       "subscriber": "Donggwon"
     }
   ],
-  "BusinessInformation": [
+  "businessInformation": [
     {
       "id": 1,
       "state": "break-time",
