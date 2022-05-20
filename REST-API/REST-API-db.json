@@ -71,7 +71,10 @@
   "members": [
     {
       "id": 1,
-      "name": "Mingi Kim"
+      "name": "Mingi Kim",
+      "password": "mingi22",
+      "address": "대전 유성구",
+      "connect": "mingi_kim@naver.com"
     },
     {
       "id": 2,
@@ -88,13 +91,14 @@
   ],
   "payment":[
     {
-      "cash":"OK"
+      "id": 1,
+      "name":"cash",
+      "value": "true"
     },
     {
-      "credit_card":"OK"
-    },
-    {
-      "local_gift_card":"NO"
+      "id": 2,
+      "name":"credit_card",
+      "value": "true"
     }
   ]
 
