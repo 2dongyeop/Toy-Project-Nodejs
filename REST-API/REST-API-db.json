@@ -21,43 +21,30 @@
       "price": 56000
     }
   ],
-  "orderList": [
+  "reviews": [
     {
       "id": 1,
-      "table": 1,
-      "order": "짜장면 1개"
-    },
-    {
-      "id": 2,
-      "table": 2,
-      "order": "짬뽕 2개"
-    },
-    {
-      "table": 3,
-      "order": "짜장면 곱빼기에 콜라 추가요",
-      "id": 3
-    }
-  ],
-  "review": [
-    {
-      "id": 1,
-      "star_point": 5,
+      "ratings": 5,
+      "writer": "Jinuk",
       "comments": "짜장면 드세요. 면빨이 쫄깃해요."
     },
     {
       "id": 2,
-      "star_point": 5,
+      "ratings": 5,
+      "writer": "Donggwon",
       "comments": "바삭 바삭 탕수육"
     }
   ],
   "bookmark": [
     {
       "id": 1,
-      "subscriber": "Jinuk"
+      "subscriber": "Jinuk",
+      "connect": "JinukLee@naver.com"
     },
     {
       "id": 2,
-      "subscriber": "Donggwon"
+      "subscriber": "Donggwon",
+      "connect": "DonggwonSeo@naver.com"
     }
   ],
   "businessInformation": [
@@ -75,18 +62,6 @@
       "password": "mingi22",
       "address": "대전 유성구",
       "connect": "mingi_kim@naver.com"
-    },
-    {
-      "id": 2,
-      "name": "Jinwook Lee"
-    },
-    {
-      "id": 3,
-      "name": "Seungjun Baek"
-    },
-    {
-      "id": 4,
-      "name": "Dongyeop Lee"
     }
   ],
   "payment":[
@@ -101,5 +76,4 @@
       "value": "true"
     }
   ]
-
 }
