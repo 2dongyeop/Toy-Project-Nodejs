@@ -6,9 +6,6 @@ POST localhost:3000/members
 Content-Type: application/json
 
 {
-  "id":2,
-  "name": "Dongyeop Lee",
-  "password": "dongyeop1999",
-  "address": "대전 서구",
-  "connect": "dongyeop1999@naver.com"
+  "name": "Mingi Kim",
+  "password": "mingi22"
 }

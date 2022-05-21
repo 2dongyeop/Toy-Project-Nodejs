@@ -64,15 +64,15 @@
       "connect": "mingi_kim@naver.com"
     }
   ],
-  "payment":[
+  "payment": [
     {
       "id": 1,
-      "name":"cash",
+      "name": "cash",
       "value": "true"
     },
     {
       "id": 2,
-      "name":"credit_card",
+      "name": "credit_card",
       "value": "true"
     }
   ]
