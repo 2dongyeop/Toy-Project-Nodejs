@@ -8,6 +8,8 @@ app.use(express.urlencoded({
     extended: true
 }));
 
+const router = express.Router();
+
 app.get('/members', (req, res, next) => {
     res.status(200).send({
         message: "GET 요청이 성공적으로 수행됨"
@@ -25,6 +27,16 @@ fs.readFile('./REST-API-db.json', 'utf8', (error, jsonFile) => {
         console.log(member);
         console.log(member.name);
     });
+    const {id, password} = JSON.parse(body);
+    for (let idx = 0; idx < members.length; idx++) {
+        const member = members[idx];
+        if (member.id === id) {
+            if (member.password === password) {
+                res.status(200).send("login success");
+            }
+        }
+    }
+    res.status(404).send('login failed');
 
     app.post('/members', (req, res, next) => {
         if (members.name === req.body.name) {
