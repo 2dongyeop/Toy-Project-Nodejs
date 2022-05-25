@@ -12,16 +12,16 @@ app.get('/members', (req,
     res.status(200).send({
         message: "GET 요청이 성공적으로 수행됨"
     });
-    console.log("GET 요청이 수행됨");
+    console.log("/member에서 GET 요청이 수행됨");
     res.send()
 });
 
 app.post('/members', (req,
                       res) => {
-    console.log("POST 요청이 수행됨");
+    console.log("/members에서 POST 요청이 수행됨");
     console.log(req.body);  //body 내용을 콘솔에 출력
 
-    fs.readFile('./REST-API-db.json', 'utf8',
+    fs.readFile('./db.json', 'utf8',
         (error, jsonFile) => {
         if (error) return console.log(error);
         const jsonData = JSON.parse(jsonFile); //db.json을 string형으로 변환하여 jsonData에 저장
@@ -39,6 +39,54 @@ app.post('/members', (req,
         }
         res.status(404).send("login failed"); //둘 중 하나라도 틀리면 로그인 실패
     });
+});
+
+app.post('/signUp', (req,
+                      res) => {
+    console.log("/signUp에서 POST 요청이 수행됨");
+
+    fs.readFile('./db.json', 'utf8',
+        (error, jsonFile) => {
+            if (error) return console.log(error);
+            const jsonData = JSON.parse(jsonFile); //db.json을 string형으로 변환하여 jsonData에 저장
+
+            const members = jsonData.members; //db.json에서 members를 members변수에 저장
+            const {name, password} = req.body;
+
+            for (let idx = 0; idx < members.length; idx++) {
+                const member = members[idx];
+                if (member.name === name) {
+                    console.log("회원가입 실패 - name 중복");
+                    return res.status(404).send("회원가입 실패 - name 중복");
+                }
+            }
+
+            const data = {
+                "members": [
+                    {
+                        "id": 1,
+                        "name": "Mingi Kim",
+                        "password": "mingi22",
+                        "address": "대전 유성구",
+                        "connect": "mingi_kim@naver.com"
+                    },
+                    {
+                        "id": 2,
+                        "name": name,
+                        "password": password,
+                        "address": "",
+                        "connect": ""
+                    }
+                ]
+            }
+
+            fs.writeFile('./db.json', JSON.stringify(data), (err) => {
+                if (err) throw err;
+                //console.log(err);
+            });
+            console.log("회원가입 성공");
+            res.status(200).send("회원가입 성공");
+        });
 });
 
 app.listen(3000, () => {
