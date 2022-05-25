@@ -1,1 +1,11 @@
-{"members":[{"id":1,"name":"Mingi Kim","password":"mingi22","address":"대전 유성구","connect":"mingi_kim@naver.com"},{"id":2,"name":"Dongyeop Lee","password":"1234","address":"","connect":""}]}
+{
+    "members": [
+        {
+          "id": 1,
+          "name": "Mingi Kim",
+          "password": "mingi22",
+          "address": "대전 유성구",
+          "connect": "mingi_kim@naver.com"
+        }
+      ]
+}
