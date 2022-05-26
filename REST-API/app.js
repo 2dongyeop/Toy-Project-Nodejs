@@ -7,159 +7,99 @@ app.use(express.urlencoded({
     extended: true
 }));
 
-app.get('/members', (req,
-                     res, next) => {
-    res.status(200).send({
-        message: "GET 요청이 성공적으로 수행됨"
-    });
-    console.log("/member에서 GET 요청이 수행됨");
-    res.send()
-});
+app.post('/SignUp', (req,
+                     res) => {
+    console.log("POST /SignUp");
 
-app.post('/members', (req,
-                      res) => {
-    console.log("/members에서 POST 요청이 수행됨");
-    console.log(req.body);  //body 내용을 콘솔에 출력
-
-    fs.readFile('./db.json', 'utf8',
-        (error, jsonFile) => {
-        if (error) return console.log(error);
-        const jsonData = JSON.parse(jsonFile); //db.json을 string형으로 변환하여 jsonData에 저장
-
-        const members = jsonData.members; //db.json에서 members를 members변수에 저장
-        const {name, password} = req.body;
-
-        for (let idx = 0; idx < members.length; idx++) {
-            const member = members[idx];
-            if (member.name === name) {                //로그인 시 name이 일치하면
-                if (member.password === password) {    //로그인 시 password가 일치하면
-                    return res.status(200).send("login success"); //로그인 성공
-                }
-            }
-        }
-        res.status(404).send("login failed"); //둘 중 하나라도 틀리면 로그인 실패
-    });
-});
-
-app.post('/signUp', (req,
-                      res) => {
-    console.log("/signUp에서 POST 요청이 수행됨");
-
-    fs.readFile('./db.json', 'utf8',
+    fs.readFile('./members.json', 'utf8',
         (error, jsonFile) => {
             if (error) return console.log(error);
-            const jsonData = JSON.parse(jsonFile); //db.json을 string형으로 변환하여 jsonData에 저장
+            const jsonData = JSON.parse(jsonFile); //members.json을 string형으로 변환하여 jsonData에 저장
 
-            const members = jsonData.members; //db.json에서 members를 members변수에 저장
+            const members = jsonData.members; //members.json에서 members를 members변수에 저장
             const {name, password} = req.body;
 
             for (let idx = 0; idx < members.length; idx++) {
                 const member = members[idx];
                 if (member.name === name) {
                     console.log("회원가입 실패 - name 중복");
-                    return res.status(404).send("회원가입 실패 - name 중복");
+                    return res.status(404).send( "회원가입 실패 - name 중복");
                 }
             }
 
             const data = {
                 "members": [
                     {
-                        "id": 1,
-                        "name": "Mingi Kim",
-                        "password": "mingi22",
-                        "address": "대전 유성구",
-                        "connect": "mingi_kim@naver.com"
-                    },
-                    {
-                        "id": 2,
                         "name": name,
-                        "password": password,
-                        "address": "",
-                        "connect": ""
+                        "password": password
                     }
                 ]
             }
 
-            fs.writeFile('./db.json', JSON.stringify(data), (err) => {
-                if (err) throw err;
-                //console.log(err);
-            });
-            console.log("회원가입 성공");
-            res.status(200).send("회원가입 성공");
+            const stringData = JSON.stringify(data);
+            fs.appendFile('./members.json', stringData,
+                (error) => {
+                    if (error) return console.log(error);
+                    console.log(name + " SignUp Success");
+                    res.status(200).send("SignUp Success");
+                });
         });
+});
+
+app.post('/Login', (req,
+                    res) => {
+    console.log("POST /Login");
+
+    fs.readFile('./members.json', 'utf8',
+        (error, jsonFile) => {
+            if (error) return console.log(error);
+            const jsonData = JSON.parse(jsonFile); //members.json을 string형으로 변환하여 jsonData에 저장
+
+            const members = jsonData.members; //members.json에서 members를 members변수에 저장
+            const {name, password} = req.body;
+
+            for (let idx = 0; idx < members.length; idx++) {
+                const member = members[idx];
+                if (member.name === name) {                //로그인 시 name이 일치하면
+                    if (member.password === password) {    //로그인 시 password가 일치하면
+                        console.log("Login Success");
+                        return res.status(200).send("login success"); //로그인 성공
+                    }
+                }
+            }
+            console.log("Login failed");
+            res.status(404).send("login failed"); //둘 중 하나라도 틀리면 로그인 실패
+        });
+});
+
+app.post('/reviews', (req
+    ,res )=> {
+    console.log("POST /reviews");
+
+    const {id, star_ratings, writer
+        , comments} = req.body;
+    const data = {
+                "id": id,
+                "star_ratings": star_ratings,
+                "writer": writer,
+                "comments": comments
+    }
+
+    const stringData = JSON.stringify(data);
+    fs.appendFile('./reviews.json', stringData,
+        (error) => {
+            if (error) return console.log(error);
+            res.status(200).send("review upload");
+            console.log("review upload");
+        });
+});
+
+app.get('/reviews', (req,
+                     res, next) => {
+    console.log("GET /reviews");
+    res.status(200).send("GET /reviews");
 });
 
 app.listen(3000, () => {
     console.log("starting server at port 3000..");
 });
-
-
-
-// fs.readFile('./REST-API-db.json', 'utf8', (error, jsonFile) => {
-//     if (error) return console.log(error);
-//     const jsonData = JSON.parse(jsonFile);
-//
-//     const members = jsonData.members;
-//     members.forEach(member => {
-//         console.log(member);
-//         console.log(member.name);
-//     });
-//     const {id, password} = JSON.parse(body);
-//     for (let idx = 0; idx < members.length; idx++) {
-//         const member = members[idx];
-//         if (member.id === id) {
-//             if (member.password === password) {
-//                 res.status(200).send("login success");
-//             }
-//         }
-//     }
-//     res.status(404).send('login failed');
-//
-//     app.post('/members', (req, res, next) => {
-//         if (members.name === req.body.name) {
-//             if (members.password === req.body.password) {
-//                 res.status(200).send("Login: Success");
-//             } else {
-//                 res.status(404).send("Login: Fail");
-//             }
-//         }
-//     });
-// });
-
-
-//
-// fs.readFile('./REST-API-db.json', 'utf8', (error, jsonFile) => {
-//     if (error) return console.log(error);
-//     const jsonData = JSON.parse(jsonFile);
-//
-//     const members = jsonData.members;
-//     members.forEach(member => {
-//         console.log(member);
-//         console.log(member.name);
-//     });
-// });
-
-
-// app.post('/members', (req, res) => {
-//     console.log(req.body);
-//
-//     fs.readFile('./REST-API-db.json', 'utf8', (error, jsonFile) => {
-//         if (error) return console.log(error);
-//         const jsonData = JSON.parse(jsonFile);
-//
-//         const members = jsonData.members;
-//         members.forEach(member => {
-//             // console.log(member);
-//             // console.log(member.name);
-//         });
-//         const memberName =
-//         if (members.name === req.name) {
-//             if (members.password === req.password) {
-//                 res.send("Login Success");
-//             }
-//         }
-//         else {
-//             res.send("Login Fail");
-//         }
-//     });
-// });
