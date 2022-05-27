@@ -72,6 +72,8 @@ app.post('/Login', (req,
         });
 });
 
+//아래는 리뷰를 작성하는 코드
+//추후에 로그인을 해야만 작성할 수있도록 보완할 예정
 app.post('/reviews', (req
     ,res )=> {
     console.log("POST /reviews");
