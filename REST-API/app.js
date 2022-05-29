@@ -7,9 +7,9 @@ app.use(express.urlencoded({
     extended: true
 }));
 
-app.post('/SignUp', (req,
+app.post('/signUp', (req,
                      res) => {
-    console.log("POST /SignUp");
+    console.log("POST /signUp");
 
     fs.readFile('./members.json', 'utf8',
         (error, jsonFile) => {
@@ -17,38 +17,34 @@ app.post('/SignUp', (req,
             const jsonData = JSON.parse(jsonFile); //members.json을 string형으로 변환하여 jsonData에 저장
 
             const members = jsonData.members; //members.json에서 members를 members변수에 저장
-            const {name, password} = req.body;
+            const {id, email} = req.body;
 
             for (let idx = 0; idx < members.length; idx++) {
                 const member = members[idx];
-                if (member.name === name) {
-                    console.log("회원가입 실패 - name 중복");
-                    return res.status(404).send( "회원가입 실패 - name 중복");
+                if (member.id === id) {
+                    if (member.email === email) {
+                        console.log("SignUp Failed - already exists");
+                        return res.status(404).send("SignUp Failed - already exists");
+                    }
                 }
             }
 
-            const data = {
-                "members": [
-                    {
-                        "name": name,
-                        "password": password
-                    }
-                ]
-            }
+            members.push(req.body);
+            //const newmembers = JSON.stringify(members,null,4);
 
-            const stringData = JSON.stringify(data);
-            fs.appendFile('./members.json', stringData,
-                (error) => {
+            fs.writeFile('./members.json', JSON.stringify(members,null,4),
+                "utf8", (err) => {
+
                     if (error) return console.log(error);
-                    console.log(name + " SignUp Success");
+                    console.log(" SignUp Success");
                     res.status(200).send("SignUp Success");
                 });
         });
 });
 
-app.post('/Login', (req,
+app.post('/login', (req,
                     res) => {
-    console.log("POST /Login");
+    console.log("POST /login");
 
     fs.readFile('./members.json', 'utf8',
         (error, jsonFile) => {
@@ -56,19 +52,19 @@ app.post('/Login', (req,
             const jsonData = JSON.parse(jsonFile); //members.json을 string형으로 변환하여 jsonData에 저장
 
             const members = jsonData.members; //members.json에서 members를 members변수에 저장
-            const {name, password} = req.body;
+            const {id, password} = req.body;
 
             for (let idx = 0; idx < members.length; idx++) {
                 const member = members[idx];
-                if (member.name === name) {                //로그인 시 name이 일치하면
+                if (member.id === id) {                //로그인 시 name이 일치하면
                     if (member.password === password) {    //로그인 시 password가 일치하면
                         console.log("Login Success");
-                        return res.status(200).send("login success"); //로그인 성공
+                        return res.status(200).send("Login Success"); //로그인 성공
                     }
                 }
             }
             console.log("Login failed");
-            res.status(404).send("login failed"); //둘 중 하나라도 틀리면 로그인 실패
+            res.status(404).send("Login failed"); //둘 중 하나라도 틀리면 로그인 실패
         });
 });
 
@@ -78,21 +74,25 @@ app.post('/reviews', (req
     ,res )=> {
     console.log("POST /reviews");
 
-    const {id, star_ratings, writer
-        , comments} = req.body;
-    const data = {
-                "id": id,
-                "star_ratings": star_ratings,
-                "writer": writer,
-                "comments": comments
-    }
-
-    const stringData = JSON.stringify(data);
-    fs.appendFile('./reviews.json', stringData,
-        (error) => {
+    fs.readFile('./reviews.json', 'utf8',
+        (error, jsonFile) => {
             if (error) return console.log(error);
-            res.status(200).send("review upload");
-            console.log("review upload");
+
+            const jsonData = JSON.parse(jsonFile); //members.json을 string형으로 변환하여 jsonData에 저장
+            //string("") -> json 변경
+
+            const reviews = jsonData.reviews;
+
+            reviews.push(req.body);
+
+
+            fs.writeFile('./reviews.json', JSON.stringify(reviews,null, 4),
+                "utf8", (error) => {
+
+                    if (error) return console.log(error);
+                    console.log("review upload");
+                    res.status(200).send("review upload");
+                });
         });
 });
 
