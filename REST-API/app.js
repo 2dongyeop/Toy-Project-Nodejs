@@ -16,20 +16,18 @@ app.post('/signUp', (req,
             if (error) return console.log(error);
             const jsonData = JSON.parse(jsonFile); //members.json을 string형으로 변환하여 jsonData에 저장
 
-            //const members = jsonData.members; //members.json에서 members를 members변수에 저장
-            const {name, email} = req.body;
+            const {name, password} = req.body;
 
             for (let idx = 0; idx < jsonData.length; idx++) {
                 const member = jsonData[idx];
                 if (member.name === name) {
-                    if (member.email === email) {
+                    if (member.password === password) {
                         console.log("SignUp Failed - already exists");
                         return res.status(404).send("SignUp Failed - already exists");
                     }
                 }
             }
             jsonData.push(req.body);
-            //members.push(req.body);
 
             fs.writeFile('./members.json', JSON.stringify(jsonData,null,4),
                 "utf8", (err) => {
@@ -68,37 +66,58 @@ app.post('/login', (req,
 });
 
 //아래는 리뷰를 작성하는 코드
-//추후에 로그인을 해야만 작성할 수있도록 보완할 예정
 app.post('/reviews', (req
     ,res )=> {
     console.log("POST /reviews");
 
-    fs.readFile('./reviews.json', 'utf8',
+    fs.readFile('./members.json', 'utf8',
         (error, jsonFile) => {
             if (error) return console.log(error);
-
             const jsonData = JSON.parse(jsonFile); //members.json을 string형으로 변환하여 jsonData에 저장
-            //string("") -> json 변경
 
-            const reviews = jsonData.reviews;
+            const {name, password} = req.body;
 
-            reviews.push(req.body);
+            for (let idx = 0; idx < jsonData.length; idx++) {
+                const member = jsonData[idx];
+                if (member.name === name) {                //로그인 시 name이 일치하면
+                    if (member.password === password) {    //로그인 시 password가 일치하면
+                        console.log("Login Success - review upload");
 
+                        fs.readFile('./reviews.json', 'utf8',
+                            (error, reviewsFile) => {
+                                if (error) return console.log(error);
 
-            fs.writeFile('./reviews.json', JSON.stringify(reviews,null, 4),
-                "utf8", (error) => {
+                                const reviewData = JSON.parse(reviewsFile); //members.json을 string형으로 변환하여 jsonData에 저장
 
-                    if (error) return console.log(error);
-                    console.log("review upload");
-                    res.status(200).send("review upload");
-                });
+                                //아래처럼 원하는 정보만 빼내어, 추가하려 했으나 실패
+                                //const {star_ratings, writer, comments} = req.body;
+                                reviewData.push(req.body);
+
+                                fs.writeFile('./reviews.json', JSON.stringify(reviewData,null, 4),
+                                    "utf8", (error) => {
+
+                                        if (error) return console.log(error);
+                                        return res.status(200).send("review upload");
+                                    });
+                            });
+                    }
+                }
+            }
         });
 });
 
 app.get('/reviews', (req,
                      res, next) => {
     console.log("GET /reviews");
-    res.status(200).send("GET /reviews");
+    // res.status(200).send("GET /reviews");
+    fs.readFile('./reviews.json', 'utf8',
+        (error, reviewsFile) => {
+            if (error) return console.log(error);
+
+            const reviewData = JSON.parse(reviewsFile);
+
+            res.status(200).send(reviewData);
+        });
 });
 
 app.listen(3000, () => {
