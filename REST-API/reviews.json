@@ -16,5 +16,12 @@
         "star_ratings": 2,
         "writer": "Dongyeop",
         "comments": "탕수육 소스가 부족해요"
+    },
+    {
+        "name": "Mingi Kim",
+        "password": "mingi22",
+        "star_ratings": 5,
+        "writer": "비밀임",
+        "comments": "음식이 깔끔해서 좋아요"
     }
 ]
