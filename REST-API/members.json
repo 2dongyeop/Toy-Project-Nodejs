@@ -1,11 +1,13 @@
-{
-  "members": [
+[
     {
-      "id": 1,
-      "name": "Mingi Kim",
-      "password": "mingi22",
-      "address": "대전 유성구",
-      "connect": "mingi_kim@naver.com"
+        "id": 1,
+        "name": "Mingi Kim",
+        "email": "mingikim@naver.com",
+        "password": "mingi22",
+        "address": "대전 유성구 한울 아파트 1003호"
+    },
+    {
+        "name": "lee",
+        "email": "1"
     }
-  ]
-}
+]
