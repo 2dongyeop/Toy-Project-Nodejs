@@ -53,11 +53,20 @@ app.post('/login', (req,
 
             for (let idx = 0; idx < jsonData.length; idx++) {
                 const member = jsonData[idx];
-                if (member.name === name) {                //로그인 시 name이 일치하면
-                    if (member.password === password) {    //로그인 시 password가 일치하면
-                        console.log("Login Success");
-                        return res.status(200).send("Login Success"); //로그인 성공
-                    }
+                if ((member.name === name) && (member.password === password)) {
+                    console.log("Login Success");
+
+                    const nameData = {
+                        name: req.body.name
+                    };
+
+                    fs.writeFile('./loginList.json', JSON.stringify(nameData,null,4),
+                        "utf8", (err) => {
+
+                            if (error) return console.log(error);
+                        });
+
+                    return res.status(200).send("Login Success"); //로그인 성공
                 }
             }
             console.log("Login failed");
@@ -70,40 +79,40 @@ app.post('/reviews', (req
     ,res )=> {
     console.log("POST /reviews");
 
-    fs.readFile('./members.json', 'utf8',
-        (error, jsonFile) => {
-            if (error) return console.log(error);
-            const jsonData = JSON.parse(jsonFile); //members.json을 string형으로 변환하여 jsonData에 저장
+    fs.readFile('./loginList.json', 'utf8', (err, loginFile) => {
+       if (err) return console.log(err);
+       const loginData = JSON.parse(loginFile);
 
-            const {name, password} = req.body;
+       const name = req.body.name;
 
-            for (let idx = 0; idx < jsonData.length; idx++) {
-                const member = jsonData[idx];
-                if (member.name === name) {                //로그인 시 name이 일치하면
-                    if (member.password === password) {    //로그인 시 password가 일치하면
-                        console.log("Login Success - review upload");
+       for (let i = 0; i < loginData.length; i++) {
+           const loginName = loginData[i];
+           if (name === loginName.name) {
+               fs.readFile('./reviews.json', 'utf8',
+                   (error, reviewsFile) => {
+                       if (error) return console.log(error);
 
-                        fs.readFile('./reviews.json', 'utf8',
-                            (error, reviewsFile) => {
-                                if (error) return console.log(error);
+                       const reviewData = JSON.parse(reviewsFile); //members.json을 string형으로 변환하여 jsonData에 저장
 
-                                const reviewData = JSON.parse(reviewsFile); //members.json을 string형으로 변환하여 jsonData에 저장
+                       const newReviewData = {
+                           star_ratings: req.body.star_ratings,
+                           writer: req.body.writer,
+                           comments: req.body.comments
+                       };
 
-                                //아래처럼 원하는 정보만 빼내어, 추가하려 했으나 실패
-                                //const {star_ratings, writer, comments} = req.body;
-                                reviewData.push(req.body);
+                       reviewData.push(newReviewData);
 
-                                fs.writeFile('./reviews.json', JSON.stringify(reviewData,null, 4),
-                                    "utf8", (error) => {
+                       fs.writeFile('./reviews.json', JSON.stringify(reviewData,null, 4),
+                           "utf8", (error) => {
 
-                                        if (error) return console.log(error);
-                                        return res.status(200).send("review upload");
-                                    });
-                            });
-                    }
-                }
-            }
-        });
+                               if (error) return console.log(error);
+                               return res.status(200).send("review upload");
+                           });
+                   });
+           }
+       }
+
+    });
 });
 
 app.get('/reviews', (req,
