@@ -1,5 +1,6 @@
 const fs = require('fs');
 const express = require("express");
+const {json} = require("express");
 
 const app = express();
 app.use(express.json());
@@ -48,11 +49,10 @@ app.post('/login', (req,
             if (error) return console.log(error);
             const jsonData = JSON.parse(jsonFile); //members.json을 string형으로 변환하여 jsonData에 저장
 
-            const members = jsonData.members; //members.json에서 members를 members변수에 저장
             const {name, password} = req.body;
 
-            for (let idx = 0; idx < members.length; idx++) {
-                const member = members[idx];
+            for (let idx = 0; idx < jsonData.length; idx++) {
+                const member = jsonData[idx];
                 if (member.name === name) {                //로그인 시 name이 일치하면
                     if (member.password === password) {    //로그인 시 password가 일치하면
                         console.log("Login Success");
