@@ -85,8 +85,8 @@ app.post('/reviews', (req
         const email = req.body.email;
 
         for (let i = 0; i < loginData.length; i++) {
-            const loginName = loginData[i];
-            if (email === loginName.email) {
+            const loginEmail = loginData[i];
+            if (email === loginEmail.email) {
                 fs.readFile('./reviews.json', 'utf8',
                     (error, reviewsFile) => {
                         if (error) return console.log(error);
