@@ -4,6 +4,12 @@
         "name": "Mingi Kim",
         "email": "mingikim@naver.com",
         "password": "mingi22",
-        "address": "대전 유성구 한울 아파트 1003호"
+        "address": "대전 유성구",
+        "identification_number": "991227-1111111"
+    },
+    {
+        "email": "ldy1204@naver.com",
+        "password": "ldy1204",
+        "identification_number": "999999-1111111"
     }
 ]
